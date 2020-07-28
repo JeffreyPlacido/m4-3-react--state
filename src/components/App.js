@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 const BoxBox = styled.div`
   position: absolute;
-  top: 50%;
+  top: 25%;
 `;
 
 const App = (props) => {
@@ -29,6 +29,7 @@ const App = (props) => {
         <BoxBox>
           <Typeahead
             suggestions={data.books}
+            categories={data.categories}
             handleSelect={(suggestion) => {
               window.alert(suggestion);
             }}

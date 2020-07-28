@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Button = styled.button`
   color: white;
-  background-color: blue;
+  background-color: black;
   padding: 8px;
   border-radius: 4px;
 `;
@@ -21,9 +21,25 @@ const Suggestion = styled.li`
   }
 `;
 
-const Typeahead = ({ suggestions, handleSelect }) => {
+const AutoFill = styled.span`
+  font-weight: bold;
+`;
+const Genre = styled.span`
+  font-size: medium;
+  font-style: italic;
+  span {
+    color: purple;
+  }
+`;
+
+const Typeahead = ({ suggestions, handleSelect, categories }) => {
   const [search, setSearch] = React.useState("");
-  if (search.length > 1) {
+  if (
+    search.length > 1 &&
+    suggestions.filter((obj) => {
+      return obj.title.toLowerCase().includes(search.toLowerCase());
+    }).length > 0
+  ) {
     return (
       <>
         <Input
@@ -51,7 +67,33 @@ const Typeahead = ({ suggestions, handleSelect }) => {
                   key={suggestion.id}
                   onClick={() => handleSelect(suggestion.title)}
                 >
-                  {suggestion.title}
+                  <AutoFill>
+                    {suggestion.title.slice(
+                      0,
+                      suggestion.title
+                        .toLowerCase()
+                        .indexOf(search.toLowerCase())
+                    )}
+                  </AutoFill>
+                  {suggestion.title.slice(
+                    suggestion.title
+                      .toLowerCase()
+                      .indexOf(search.toLowerCase()),
+                    suggestion.title
+                      .toLowerCase()
+                      .indexOf(search.toLowerCase()) + search.length
+                  )}
+                  <AutoFill>
+                    {suggestion.title.slice(
+                      suggestion.title
+                        .toLowerCase()
+                        .indexOf(search.toLowerCase()) + search.length,
+                      suggestion.title.length
+                    )}{" "}
+                  </AutoFill>
+                  <Genre>
+                    in <span>{categories[suggestion.categoryId].name}</span>
+                  </Genre>
                 </Suggestion>
               );
             })}
